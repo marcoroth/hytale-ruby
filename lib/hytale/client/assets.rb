@@ -19,9 +19,7 @@ module Hytale
           return if @extracted
           return unless zip_path
 
-          unless File.directory?(cache_path) && count > 0
-            extract_all
-          end
+          extract_all unless File.directory?(cache_path) && count.positive?
 
           @extracted = true
         end
@@ -120,7 +118,9 @@ module Hytale
 
           require_zip!
 
-          prefix = dir_path ? (dir_path.end_with?("/") ? dir_path : "#{dir_path}/") : nil
+          prefix = if dir_path
+                     dir_path.end_with?("/") ? dir_path : "#{dir_path}/"
+                   end
 
           Zip::File.open(zip_path) do |zip|
             entries = zip.entries.reject(&:directory?)
@@ -169,7 +169,7 @@ module Hytale
         end
 
         def block_texture_path(name)
-          name = name.end_with?(".png") ? name : "#{name}.png"
+          name = "#{name}.png" unless name.end_with?(".png")
 
           cached_path("#{BLOCK_TEXTURES_PATH}/#{name}")
         end
@@ -183,7 +183,7 @@ module Hytale
         end
 
         def item_icon_path(name)
-          name = name.end_with?(".png") ? name : "#{name}.png"
+          name = "#{name}.png" unless name.end_with?(".png")
 
           cached_path("#{ITEM_ICONS_PATH}/#{name}")
         end

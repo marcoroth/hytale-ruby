@@ -53,7 +53,7 @@ module Hytale
 
         return nil unless path
 
-        relative_path = path.sub(Assets.cache_path + "/", "")
+        relative_path = path.sub("#{Assets.cache_path}/", "")
 
         Assets.read(relative_path)
       end
@@ -70,7 +70,7 @@ module Hytale
           "#{base_id}_Deep",
           "#{base_id}_Top",
           "#{base_id}_Side",
-          base_id
+          base_id,
         ]
 
         variants.each do |variant|
@@ -96,7 +96,7 @@ module Hytale
           id: id,
           category: category,
           name: name,
-          texture_path: texture_path
+          texture_path: texture_path,
         }
       end
 
@@ -155,11 +155,11 @@ module Hytale
           texture_names = Assets.block_textures
 
           block_ids = texture_names
-            .reject { |t| t.start_with?("T_") }  # Helper textures (T_Crack_*, etc.)
-            .reject { |t| t.start_with?("_") }   # Internal textures
-            .reject { |t| t.end_with?("_GS") }   # Greyscale variants
-            .uniq
-            .sort
+                      .reject { |t| t.start_with?("T_") }  # Helper textures (T_Crack_*, etc.)
+                      .reject { |t| t.start_with?("_") }   # Internal textures
+                      .reject { |t| t.end_with?("_GS") }   # Greyscale variants
+                      .uniq
+                      .sort
 
           block_ids.map { |id| new(id) }
         end

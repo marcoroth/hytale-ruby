@@ -68,7 +68,7 @@ module Hytale
         def chunk_count
           parse_header unless @header_parsed
 
-          index_table.count { |v| v > 0 }
+          index_table.count(&:positive?)
         end
 
         def block_types
@@ -77,17 +77,17 @@ module Hytale
 
         def chunk_exists?(local_x, local_z)
           idx = (local_z * 32) + local_x
-          return false if idx < 0 || idx >= CHUNKS_PER_REGION
+          return false if idx.negative? || idx >= CHUNKS_PER_REGION
 
           parse_header unless @header_parsed
 
-          index_table[idx] > 0
+          index_table[idx].positive?
         end
 
         def chunk_data(local_x, local_z)
           idx = (local_z * 32) + local_x
 
-          return nil if idx < 0 || idx >= CHUNKS_PER_REGION
+          return nil if idx.negative? || idx >= CHUNKS_PER_REGION
 
           chunk_at_index(idx)
         end
@@ -96,7 +96,7 @@ module Hytale
           return enum_for(:each_chunk) unless block_given?
 
           index_table.each_with_index do |sector, idx|
-            next if sector == 0
+            next if sector.zero?
 
             chunk = chunk_at_index(idx)
 
@@ -105,12 +105,12 @@ module Hytale
         end
 
         def chunk_at_index(idx)
-          return nil if idx < 0 || idx >= CHUNKS_PER_REGION
+          return nil if idx.negative? || idx >= CHUNKS_PER_REGION
 
           parse_header unless @header_parsed
 
           sector = index_table[idx]
-          return nil if sector == 0
+          return nil if sector.zero?
 
           parse_chunk_at_sector(sector, idx)
         end
@@ -215,7 +215,7 @@ module Hytale
           result = {}
 
           index_table.each_with_index do |sector, idx|
-            next if sector == 0
+            next if sector.zero?
 
             chunk_data = parse_chunk_at_sector(sector, idx)
             result[idx] = chunk_data if chunk_data
@@ -237,10 +237,10 @@ module Hytale
           return nil unless zstd_magic == "\x28\xB5\x2F\xFD".b
 
           # Read chunk header: [decompressed_size 4B BE] [compressed_size 4B BE]
-          decompressed_size = data[header_position, 4].unpack1("L>")
+          data[header_position, 4].unpack1("L>")
           compressed_size = data[header_position + 4, 4].unpack1("L>")
 
-          return nil if compressed_size == 0 || zstd_position + compressed_size > data.size
+          return nil if compressed_size.zero? || zstd_position + compressed_size > data.size
 
           compressed_data = data[zstd_position, compressed_size]
 

@@ -133,7 +133,7 @@ class CLI
 
     saves.each do |save|
       world = save.world
-      puts "#{save.name}"
+      puts save.name
       puts "  Seed:      #{world.seed}"
       puts "  Mode:      #{world.game_mode}"
       puts "  PvP:       #{world.pvp_enabled?}"
@@ -199,7 +199,7 @@ class CLI
 
     memories = save.memories
     puts "Memories (#{memories.count} creatures discovered)"
-    if memories.count > 0
+    if memories.any?
       puts "  Locations: #{memories.locations.join(", ")}"
       puts "  Recent:"
       memories.all.sort_by { |m| m.captured_at || Time.at(0) }.last(5).each do |m|
@@ -380,7 +380,6 @@ class CLI
     end
 
     if category
-      # Show prefabs in a specific category
       prefabs = Hytale.client.prefabs_in_category(category)
 
       if prefabs.empty?
@@ -394,7 +393,6 @@ class CLI
       puts "Prefabs in #{category} (#{prefabs.count})"
       puts
 
-      # Group by subcategory if available
       by_subcategory = prefabs.group_by(&:subcategory)
 
       by_subcategory.each do |subcat, subprefabs|
@@ -413,7 +411,6 @@ class CLI
         puts
       end
     else
-      # Show summary of all categories
       total = Hytale.client.prefabs.count
 
       puts "Prefabs (#{total} total)"
@@ -452,11 +449,14 @@ class CLI
     puts
 
     puts "Recent Sessions"
+
     log.sessions.last(5).each do |session|
       status = session.game_launched? ? "launched" : "no launch"
-      errors = session.errors.count > 0 ? ", #{session.errors.count} errors" : ""
+      errors = session.errors.any? ? ", #{session.errors.count} errors" : ""
+
       puts "  #{session.started_at&.strftime("%Y-%m-%d %H:%M")} - v#{session.version} (#{status}#{errors})"
     end
+
     puts
 
     if log.errors.any?

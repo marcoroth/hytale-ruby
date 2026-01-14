@@ -52,9 +52,7 @@ module Hytale
 
                   color = texture[tex_x, tex_z]
 
-                  if shading
-                    color = apply_height_shading(color, block.y, chunk.height)
-                  end
+                  color = apply_height_shading(color, block.y, chunk.height) if shading
 
                   png[out_x + tx, out_z + tz] = color
                 end
@@ -77,21 +75,19 @@ module Hytale
           height = CHUNK_SIZE * scale
           png = ChunkyPNG::Image.new(width, height, ChunkyPNG::Color::TRANSPARENT)
 
-          if detailed && chunk.height > 0
+          if detailed && chunk.height.positive?
             CHUNK_SIZE.times do |block_z|
               CHUNK_SIZE.times do |block_x|
                 surface = chunk.surface_at(block_x, block_z)
                 block_type = surface&.id || "Empty"
                 color = block_color(block_type) || default_color(block_type)
 
-                if shading && surface
-                  color = apply_height_shading(color, surface.y, chunk.height)
-                end
+                color = apply_height_shading(color, surface.y, chunk.height) if shading && surface
 
                 scale.times do |dz|
                   scale.times do |dx|
-                    px = block_x * scale + dx
-                    pz = block_z * scale + dz
+                    px = (block_x * scale) + dx
+                    pz = (block_z * scale) + dz
                     png[px, pz] = color
                   end
                 end
@@ -130,21 +126,19 @@ module Hytale
             chunk_x = chunk.local_x * CHUNK_SIZE * scale
             chunk_z = chunk.local_z * CHUNK_SIZE * scale
 
-            if detailed && chunk.height > 0
+            if detailed && chunk.height.positive?
               CHUNK_SIZE.times do |block_z|
                 CHUNK_SIZE.times do |block_x|
                   surface = chunk.surface_at(block_x, block_z)
                   block_type = surface&.id || "Empty"
                   color = block_color(block_type) || default_color(block_type)
 
-                  if shading && surface
-                    color = apply_height_shading(color, surface.y, chunk.height)
-                  end
+                  color = apply_height_shading(color, surface.y, chunk.height) if shading && surface
 
                   scale.times do |dz|
                     scale.times do |dx|
-                      px = chunk_x + block_x * scale + dx
-                      pz = chunk_z + block_z * scale + dz
+                      px = chunk_x + (block_x * scale) + dx
+                      pz = chunk_z + (block_z * scale) + dz
 
                       png[px, pz] = color if px < width && pz < height
                     end
@@ -195,21 +189,19 @@ module Hytale
               chunk_x = region_x + (chunk.local_x * CHUNK_SIZE * scale)
               chunk_z = region_z + (chunk.local_z * CHUNK_SIZE * scale)
 
-              if detailed && chunk.height > 0
+              if detailed && chunk.height.positive?
                 CHUNK_SIZE.times do |block_z|
                   CHUNK_SIZE.times do |block_x|
                     surface = chunk.surface_at(block_x, block_z)
                     block_type = surface&.id || "Empty"
                     color = block_color(block_type) || default_color(block_type)
 
-                    if shading && surface
-                      color = apply_height_shading(color, surface.y, chunk.height)
-                    end
+                    color = apply_height_shading(color, surface.y, chunk.height) if shading && surface
 
                     scale.times do |dz|
                       scale.times do |dx|
-                        px = chunk_x + block_x * scale + dx
-                        pz = chunk_z + block_z * scale + dz
+                        px = chunk_x + (block_x * scale) + dx
+                        pz = chunk_z + (block_z * scale) + dz
 
                         png[px, pz] = color if px < width && pz < height
                       end
@@ -262,7 +254,7 @@ module Hytale
         # @param y [Integer] Block Y coordinate (height)
         # @param max_height [Integer] Maximum height in the chunk
         # @return [Integer] Shaded color
-        def apply_height_shading(color, y, max_height)
+        def apply_height_shading(color, y, _max_height)
           require "chunky_png"
 
           # Normalize height to 0.0-1.0 range
@@ -327,7 +319,7 @@ module Hytale
 
           # Try stripping common suffixes to find base texture
           # e.g., Soil_Grass_Full -> Soil_Grass, Plant_Grass_Sharp_Tall -> Plant_Grass_Sharp
-          suffixes_to_strip = %w[_Full _Short _Tall _Small _Large _Medium _Wild _Stack]
+          suffixes_to_strip = ["_Full", "_Short", "_Tall", "_Small", "_Large", "_Medium", "_Wild", "_Stack"]
 
           suffixes_to_strip.each do |suffix|
             next unless base_name.end_with?(suffix)
@@ -381,7 +373,7 @@ module Hytale
             end
           end
 
-          return nil if count == 0
+          return nil if count.zero?
 
           avg_r = (total_r / count).clamp(0, 255)
           avg_g = (total_g / count).clamp(0, 255)

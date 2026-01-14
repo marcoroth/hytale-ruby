@@ -104,18 +104,18 @@ module Hytale
         backup_path = File.join(path, "backup")
         return [] unless File.directory?(backup_path)
 
-        Dir.glob(File.join(backup_path, "*.zip")).map { |f|
+        Dir.glob(File.join(backup_path, "*.zip")).map do |f|
           Backup.new(f)
-        }.sort_by(&:created_at).reverse
+        end.sort_by(&:created_at).reverse
       end
 
       def logs
         logs_path = File.join(path, "logs")
         return [] unless File.directory?(logs_path)
 
-        Dir.glob(File.join(logs_path, "*.log")).map { |f|
+        Dir.glob(File.join(logs_path, "*.log")).map do |f|
           ServerLog.new(f)
-        }.sort_by(&:created_at).reverse
+        end.sort_by(&:created_at).reverse
       end
 
       def mods_path

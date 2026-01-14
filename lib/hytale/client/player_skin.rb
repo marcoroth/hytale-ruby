@@ -33,7 +33,7 @@ module Hytale
       def cape = data["cape"]
 
       def equipped_items
-        data.reject { |_, v| v.nil? }
+        data.compact
       end
 
       def empty_slots
@@ -130,12 +130,12 @@ module Hytale
           cape: cape_texture_path,
           head_accessory: head_accessory_texture_path,
           face_accessory: face_accessory_texture_path,
-          ear_accessory: ear_accessory_texture_path
+          ear_accessory: ear_accessory_texture_path,
         }.compact
       end
 
       def to_s
-        "PlayerSkin: #{uuid || 'unknown'}"
+        "PlayerSkin: #{uuid || "unknown"}"
       end
 
       def to_h

@@ -91,10 +91,10 @@ module Hytale
 
         def to_s
           position = if local_x && local_z
-                  "(#{local_x}, #{local_z})"
-                else
-                  "##{index}"
-                end
+                       "(#{local_x}, #{local_z})"
+                     else
+                       "##{index}"
+                     end
 
           "Chunk #{position} - #{size} bytes, #{block_types.size} block types"
         end
@@ -177,9 +177,7 @@ module Hytale
         def render_textured(path = nil, texture_scale: 16, shading: true, cache: true)
           path ||= cache_path(texture_scale: texture_scale, shading: shading)
 
-          if cache && File.exist?(path)
-            return path
-          end
+          return path if cache && File.exist?(path)
 
           FileUtils.mkdir_p(File.dirname(path))
 
@@ -197,7 +195,9 @@ module Hytale
         def cache_path(texture_scale: 16, shading: true)
           return nil unless region
 
-          save_name = region.path.split("/").find { |p| p.include?("Saves") }&.then { |_| region.path.split("Saves/")[1]&.split("/")&.first } || "unknown"
+          save_name = region.path.split("/").find do |p|
+            p.include?("Saves")
+          end&.then { |_| region.path.split("Saves/")[1]&.split("/")&.first } || "unknown"
           world_name = region.path.split("/worlds/")[1]&.split("/")&.first || "default"
 
           cache_dir = File.join(
@@ -255,9 +255,9 @@ module Hytale
           palette = parsed[:palette]
           block_data = parsed[:block_data]
 
-          return nil if y < 0 || y >= parsed[:height]
+          return nil if y.negative? || y >= parsed[:height]
 
-          block_index = z * CHUNK_WIDTH + x
+          block_index = (z * CHUNK_WIDTH) + x
 
           # Encoding depends on palette size:
           # - Palette <= 16: 4-bit encoding (128 bytes per layer, 2 blocks per byte)
@@ -270,10 +270,10 @@ module Hytale
 
             byte = block_data[byte_offset].ord
             index = if block_index.even?
-                    byte & 0x0F
-                  else
-                    (byte >> 4) & 0x0F
-                  end
+                      byte & 0x0F
+                    else
+                      (byte >> 4) & 0x0F
+                    end
           else
             layer_offset = y * 256
             byte_offset = layer_offset + block_index
@@ -283,7 +283,7 @@ module Hytale
             index = block_data[byte_offset].ord
           end
 
-          return nil if index == 0 # Index 0 is always air/void
+          return nil if index.zero? # Index 0 is always air/void
 
           palette[index]
         end
@@ -362,8 +362,12 @@ module Hytale
             data_marker = data.index("\x05Data\x00", block_marker)
             break unless data_marker && data_marker < block_marker + 100
 
-            data_size = data[data_marker + 6, 4].unpack1("V") rescue 0
-            next if data_size == 0
+            data_size = begin
+              data[data_marker + 6, 4].unpack1("V")
+            rescue StandardError
+              0
+            end
+            next if data_size.zero?
 
             position = block_marker + 1
 
@@ -386,7 +390,7 @@ module Hytale
           return nil unless raw_data && raw_data.size > 20
 
           palette_count = raw_data[6].ord
-          return nil if palette_count == 0 || palette_count > 64
+          return nil if palette_count.zero? || palette_count > 64
 
           # Parse palette entries starting at offset 9
           # Index 0 is implicitly air/void (no block data)
@@ -397,7 +401,7 @@ module Hytale
             break if offset >= raw_data.size - 10
 
             len = raw_data[offset].ord
-            break if len == 0 || len > 100
+            break if len.zero? || len > 100
 
             name = raw_data[offset + 1, len]
             meta = raw_data[offset + 1 + len, 4]
@@ -410,8 +414,8 @@ module Hytale
             offset += 1 + len + 4
           end
 
-          block_data = raw_data[offset..-1]
-          return nil unless block_data && block_data.size > 0
+          block_data = raw_data[offset..]
+          return nil unless block_data&.size&.positive?
 
           # Calculate height based on encoding:
           # - Palette <= 16: 4-bit encoding (128 bytes per layer)
@@ -441,9 +445,13 @@ module Hytale
           position = 0
 
           while position < data.size - 2
-            length = data[position].ord rescue 0
+            length = begin
+              data[position].ord
+            rescue StandardError
+              0
+            end
 
-            if length > 0 && length < 64 && position + 1 + length <= data.size
+            if length.positive? && length < 64 && position + 1 + length <= data.size
               string = data[position + 1, length]
 
               if string =~ /\A[A-Za-z_][A-Za-z0-9_]*\z/
@@ -499,8 +507,12 @@ module Hytale
           position = data_offset + 4
           return nil if position + 4 >= data.size
 
-          size = data[position + 1, 4].unpack1("L<") rescue 0
-          return nil if size == 0 || size > 100_000
+          size = begin
+            data[position + 1, 4].unpack1("L<")
+          rescue StandardError
+            0
+          end
+          return nil if size.zero? || size > 100_000
 
           palette = {}
           palette_end = nil
@@ -520,7 +532,11 @@ module Hytale
 
             if index_position + 4 < search_data.size
               index_data = search_data[index_position, 4]
-              index = index_data.bytes[2] rescue nil
+              index = begin
+                index_data.bytes[2]
+              rescue StandardError
+                nil
+              end
 
               palette[index] = name if index
             end
@@ -528,9 +544,7 @@ module Hytale
             palette_end = search_start + match_position + name.length + 4
           end
 
-          if search_data.include?("Empty")
-            palette[1] ||= "Empty"
-          end
+          palette[1] ||= "Empty" if search_data.include?("Empty")
 
           {
             offset: data_offset,
@@ -579,29 +593,28 @@ module Hytale
 
             after_type = type_position + block_type.length + 10
 
-            if after_type < data.size - 256
-              sample = data[after_type, 256]
-              byte_counts = Hash.new(0)
-              sample.bytes.each { |b| byte_counts[b] += 1 }
+            next unless after_type < data.size - 256
 
-              max_count = byte_counts.values.max || 0
+            sample = data[after_type, 256]
+            byte_counts = Hash.new(0)
+            sample.bytes.each { |b| byte_counts[b] += 1 }
 
-              if max_count > 128
-                dominant_byte = byte_counts.key(max_count)
+            max_count = byte_counts.values.max || 0
 
-                areas << {
-                  offset: after_type,
-                  dominant_value: dominant_byte,
-                  palette: build_section_palette(type_position),
-                  data: sample,
-                }
-              end
-            end
+            next unless max_count > 128
+
+            dominant_byte = byte_counts.key(max_count)
+
+            areas << {
+              offset: after_type,
+              dominant_value: dominant_byte,
+              palette: build_section_palette(type_position),
+              data: sample,
+            }
           end
 
           areas
         end
-
 
         def build_section_palette(section_start)
           palette = {}
@@ -613,14 +626,26 @@ module Hytale
           position = 0
 
           while position < search_data.size - 10
-            length = search_data[position].ord rescue 0
+            length = begin
+              search_data[position].ord
+            rescue StandardError
+              0
+            end
 
             if length > 4 && length < 30
-              string = search_data[position + 1, length] rescue ""
+              string = begin
+                search_data[position + 1, length]
+              rescue StandardError
+                ""
+              end
 
               if string =~ /\A(Rock|Soil|Water|Plant|Wood|Ore|Sand|Stone|Env|Air|Grass|Snow|Ice|Empty)_[A-Za-z_]*\z/ || string == "Empty"
                 index_position = position + 1 + length + 2
-                index = search_data[index_position].ord rescue nil
+                index = begin
+                  search_data[index_position].ord
+                rescue StandardError
+                  nil
+                end
 
                 palette[index] = str if index && index < 16
                 position += length + 5
@@ -642,7 +667,7 @@ module Hytale
           return if palette.empty?
 
           bits_per_block = calculate_bits_per_block(palette.size)
-          return if bits_per_block == 0
+          return if bits_per_block.zero?
 
           dominant_block = palette.values.find { |n| n =~ /Grass|Soil|Rock|Stone/ } || palette.values.first
 

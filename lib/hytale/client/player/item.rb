@@ -19,7 +19,7 @@ module Hytale
         def max_durability = data["MaxDurability"]
 
         def durability_percent
-          return nil unless durability && max_durability && max_durability > 0
+          return nil unless durability && max_durability&.positive?
 
           (durability / max_durability * 100).round(1)
         end
@@ -62,17 +62,11 @@ module Hytale
         def generate_icon_variations(item_id)
           variations = []
 
-          if item_id.include?("Shortbow")
-            variations << item_id.gsub("Shortbow", "Bow")
-          end
+          variations << item_id.gsub("Shortbow", "Bow") if item_id.include?("Shortbow")
 
-          if item_id.include?("Longbow")
-            variations << item_id.gsub("Longbow", "Bow")
-          end
+          variations << item_id.gsub("Longbow", "Bow") if item_id.include?("Longbow")
 
-          if item_id.include?("Longsword")
-            variations << item_id.gsub("Longsword", "Sword")
-          end
+          variations << item_id.gsub("Longsword", "Sword") if item_id.include?("Longsword")
 
           variations
         end

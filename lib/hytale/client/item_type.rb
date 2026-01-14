@@ -122,7 +122,7 @@ module Hytale
           quality: quality,
           item_level: item_level,
           max_durability: max_durability,
-          icon_path: icon_path
+          icon_path: icon_path,
         }
       end
 
@@ -174,12 +174,9 @@ module Hytale
         end
 
         def definition_paths
-          @definition_paths ||= begin
-            Assets.list(ITEMS_PATH)
-              .select { |f| f.end_with?(".json") }
-              .map { |f| [File.basename(f, ".json"), f] }
-              .to_h
-          end
+          @definition_paths ||= Assets.list(ITEMS_PATH)
+                                      .select { |f| f.end_with?(".json") }
+                                      .to_h { |f| [File.basename(f, ".json"), f] }
         end
 
         private

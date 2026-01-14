@@ -8,7 +8,7 @@ module Hytale
           @data_path ||= default_data_path
         end
 
-        attr_writer :data_path
+        attr_writer :data_path, :assets_cache_path
 
         def reset!
           @data_path = nil
@@ -84,8 +84,6 @@ module Hytale
         def assets_cache_path
           @assets_cache_path ||= File.expand_path("assets", gem_root)
         end
-
-        attr_writer :assets_cache_path
 
         def gem_root
           File.expand_path("../../..", __dir__)

@@ -25,7 +25,7 @@ module Hytale
         shoes: "Shoes.json",
         skin_features: "SkinFeatures.json",
         undertops: "Undertops.json",
-        underwear: "Underwear.json"
+        underwear: "Underwear.json",
       }.freeze
 
       class << self
@@ -50,9 +50,7 @@ module Hytale
           if variant_name && item["Textures"]
             variant_data = item["Textures"][variant_name]
 
-            if variant_data && variant_data["Texture"]
-              return Assets.cached_path("Common/#{variant_data["Texture"]}")
-            end
+            return Assets.cached_path("Common/#{variant_data["Texture"]}") if variant_data && variant_data["Texture"]
           end
 
           texture = item["GreyscaleTexture"] || item["Texture"]

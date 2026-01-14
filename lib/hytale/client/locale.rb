@@ -84,9 +84,7 @@ module Hytale
           result = translations(locale)[key]
 
           # Fall back to English if translation missing and fallback enabled
-          if result.nil? && fallback && locale != DEFAULT_LOCALE
-            result = translations(DEFAULT_LOCALE)[key]
-          end
+          result = translations(DEFAULT_LOCALE)[key] if result.nil? && fallback && locale != DEFAULT_LOCALE
 
           result
         end
@@ -168,10 +166,10 @@ module Hytale
 
         def detect_available_locales
           Assets.list("Server/Languages")
-            .map { |f| f.split("/")[2] }
-            .uniq
-            .reject { |l| l.nil? || l.end_with?(".lang") }
-            .sort
+                .map { |f| f.split("/")[2] }
+                .uniq
+                .reject { |l| l.nil? || l.end_with?(".lang") }
+                .sort
         end
 
         def load_translations(locale)
@@ -215,8 +213,8 @@ module Hytale
                 current_value = []
               end
             elsif line =~ /^([a-zA-Z0-9_.]+)\s*=\s*(.*)$/
-              key = $1
-              value = $2
+              key = ::Regexp.last_match(1)
+              value = ::Regexp.last_match(2)
 
               if value.end_with?("\\")
                 current_key = key

@@ -220,7 +220,7 @@ module Hytale
 
         (b[:min_x]..b[:max_x]).each { |x| header += x.to_s.center(3) }
         lines << header
-        lines << ("    " + ("-" * (((b[:max_x] - b[:min_x] + 1) * 3) + 2)))
+        lines << "    #{"-" * (((b[:max_x] - b[:min_x] + 1) * 3) + 2)}"
 
         player_regions = players.map do |p|
           pos = p.position
@@ -260,7 +260,7 @@ module Hytale
           lines << row
         end
 
-        lines << ("    " + ("-" * (((b[:max_x] - b[:min_x] + 1) * 3) + 2)))
+        lines << "    #{"-" * (((b[:max_x] - b[:min_x] + 1) * 3) + 2)}"
         lines << ""
         lines << "Legend: . = small, o = medium, O = large, # = huge, Letter = player"
 

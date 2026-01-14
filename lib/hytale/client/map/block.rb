@@ -84,7 +84,7 @@ module Hytale
         end
 
         def liquid?
-          category == "Water" || category == "Lava"
+          ["Water", "Lava"].include?(category)
         end
 
         def vegetation?
