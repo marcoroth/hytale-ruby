@@ -1,0 +1,497 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "hytale"
+
+class CLI
+  COMMANDS = {
+    "info" => "Show Hytale installation info",
+    "settings" => "Show game settings",
+    "saves" => "List all saves",
+    "save" => "Show details for a specific save",
+    "player" => "Show player details",
+    "map" => "Show map of explored regions",
+    "prefabs" => "List prefabs by category",
+    "log" => "Show launcher log summary",
+    "help" => "Show this help message",
+  }.freeze
+
+  def initialize(args)
+    @args = args
+    @command = args.first || "info"
+  end
+
+  def run
+    unless Hytale.client.installed?
+      puts "Hytale is not installed on this system."
+      puts "Expected data at: #{Hytale::Client::Config.data_path}"
+      exit 1
+    end
+
+    case @command
+    when "info" then info
+    when "settings" then settings
+    when "saves" then saves
+    when "save" then save
+    when "player" then player
+    when "map" then map
+    when "prefabs" then prefabs
+    when "log" then log
+    when "help", "-h", "--help" then help
+    else
+      puts "Unknown command: #{@command}"
+      puts
+      help
+      exit 1
+    end
+  end
+
+  private
+
+  def info
+    puts "Hytale for Ruby v#{Hytale::VERSION}"
+    puts
+    puts "Installation"
+    puts "  Data path: #{Hytale::Client::Config.data_path}"
+    puts "  Installed: #{Hytale.client.installed?}"
+    puts "  Running:   #{Hytale.client.running?}"
+    puts
+
+    log = Hytale.launcher_log
+    puts "Launcher"
+    puts "  Version:  #{log.current_version}"
+    puts "  Channel:  #{log.current_channel}"
+    puts "  Profile:  #{log.current_profile_uuid}"
+    puts "  Sessions: #{log.sessions.count}"
+    puts "  Launches: #{log.game_launches.count}"
+    puts
+
+    settings = Hytale.settings
+    puts "Settings"
+    puts "  Window:     #{settings.window_size.join("x")}"
+    puts "  FPS Limit:  #{settings.fps_limit}"
+    puts "  FOV:        #{settings.field_of_view}"
+    puts "  Fullscreen: #{settings.fullscreen?}"
+    puts
+
+    saves = Hytale.saves
+    puts "Saves (#{saves.count})"
+    saves.each do |save|
+      world = save.world
+      puts "  #{save.name}"
+      puts "    Mode: #{world.game_mode}, Players: #{save.players.count}, Backups: #{save.backups.count}"
+    end
+  end
+
+  def settings
+    s = Hytale.settings
+
+    puts "Display"
+    puts "  Window:       #{s.window_size.join("x")}"
+    puts "  Fullscreen:   #{s.fullscreen?}"
+    puts "  VSync:        #{s.vsync?}"
+    puts "  FPS Limit:    #{s.fps_limit}"
+    puts "  FOV:          #{s.field_of_view}"
+    puts
+
+    puts "Rendering"
+    puts "  View Distance:  #{s.rendering.view_distance}"
+    puts "  Anti-Aliasing:  #{s.rendering.anti_aliasing}"
+    puts "  Shadows:        #{s.rendering.shadows}"
+    puts "  Bloom:          #{s.rendering.bloom}"
+    puts "  Depth of Field: #{s.rendering.depth_of_field}"
+    puts
+
+    puts "Audio"
+    puts "  Master: #{(s.audio.master_volume * 100).round}%"
+    puts "  Music:  #{(s.audio.music_volume * 100).round}%"
+    puts "  SFX:    #{(s.audio.sfx_volume * 100).round}%"
+    puts "  UI:     #{(s.audio.ui_volume * 100).round}%"
+    puts
+
+    puts "Gameplay"
+    puts "  Arachnophobia Mode: #{s.gameplay.arachnophobia_mode?}"
+    puts "  Auto Jump:          #{s.gameplay.auto_jump_obstacle?}"
+    puts "  Camera Flying:      #{s.gameplay.camera_based_flying?}"
+    puts
+
+    puts "Mouse"
+    puts "  Sensitivity: #{s.mouse_settings.x_speed} x #{s.mouse_settings.y_speed}"
+    puts "  Inverted:    #{s.mouse_settings.inverted?}"
+  end
+
+  def saves
+    saves = Hytale.saves
+
+    if saves.empty?
+      puts "No saves found."
+      return
+    end
+
+    puts "Saves (#{saves.count})"
+    puts
+
+    saves.each do |save|
+      world = save.world
+      puts "#{save.name}"
+      puts "  Seed:      #{world.seed}"
+      puts "  Mode:      #{world.game_mode}"
+      puts "  PvP:       #{world.pvp_enabled?}"
+      puts "  Day/Night: #{world.daytime_duration}s / #{world.nighttime_duration}s"
+      puts "  Players:   #{save.players.count}"
+      puts "  Memories:  #{save.memories.count}"
+      puts "  Backups:   #{save.backups.count}"
+      puts "  Mods:      #{save.mods.any? ? save.mods.join(", ") : "none"}"
+      puts
+    end
+  end
+
+  def save
+    name = @args[1]
+
+    unless name
+      puts "Usage: hytale save <name>"
+      puts
+      puts "Available saves:"
+      Hytale.saves.each { |s| puts "  #{s.name}" }
+      return
+    end
+
+    begin
+      save = Hytale.client.save(name)
+    rescue Hytale::NotFoundError
+      puts "Save not found: #{name}"
+      puts
+      puts "Available saves:"
+      Hytale.saves.each { |s| puts "  #{s.name}" }
+      return
+    end
+
+    world = save.world
+
+    puts "Save: #{save.name}"
+    puts
+    puts "World"
+    puts "  Display Name: #{world.display_name}"
+    puts "  Seed:         #{world.seed}"
+    puts "  Game Mode:    #{world.game_mode}"
+    puts "  PvP:          #{world.pvp_enabled?}"
+    puts "  Fall Damage:  #{world.fall_damage_enabled?}"
+    puts "  Day Duration: #{world.daytime_duration}s"
+    puts "  Night Duration: #{world.nighttime_duration}s"
+    puts
+
+    puts "Death Settings"
+    puts "  Items Loss:      #{world.death_settings.items_loss_percentage}%"
+    puts "  Durability Loss: #{world.death_settings.durability_loss_percentage}%"
+    puts
+
+    puts "Players (#{save.players.count})"
+    save.players.each do |p|
+      puts "  #{p.name}"
+      puts "    Position: #{p.position}"
+      puts "    Health:   #{p.stats.health}"
+      puts "    Stamina:  #{p.stats.stamina&.round(1)}"
+      puts "    Mode:     #{p.game_mode}"
+      puts "    Zones:    #{p.discovered_zones.count} discovered"
+    end
+    puts
+
+    memories = save.memories
+    puts "Memories (#{memories.count} creatures discovered)"
+    if memories.count > 0
+      puts "  Locations: #{memories.locations.join(", ")}"
+      puts "  Recent:"
+      memories.all.sort_by { |m| m.captured_at || Time.at(0) }.last(5).each do |m|
+        puts "    #{m.friendly_name} at #{m.location}"
+      end
+    end
+    puts
+
+    puts "Backups (#{save.backups.count})"
+    save.backups.first(5).each do |b|
+      puts "  #{b.filename} (#{b.size_mb} MB)"
+    end
+    puts
+
+    return unless save.mods.any?
+
+    puts "Mods (#{save.mods.count})"
+    save.mods.each { |m| puts "  #{m}" }
+  end
+
+  def player
+    save_name = @args[1]
+    player_name = @args[2]
+
+    unless save_name
+      puts "Usage: hytale player <save> [player_name]"
+      puts
+      puts "Available saves:"
+      Hytale.saves.each { |s| puts "  #{s.name}" }
+      return
+    end
+
+    begin
+      save = Hytale.client.save(save_name)
+    rescue Hytale::NotFoundError
+      puts "Save not found: #{save_name}"
+      return
+    end
+
+    players = save.players
+
+    if players.empty?
+      puts "No players found in save: #{save_name}"
+      return
+    end
+
+    player = if player_name
+               players.find { |p| p.name.downcase == player_name.downcase }
+             else
+               players.first
+             end
+
+    unless player
+      puts "Player not found: #{player_name}"
+      puts
+      puts "Available players:"
+      players.each { |p| puts "  #{p.name}" }
+      return
+    end
+
+    puts "Player: #{player.name}"
+    puts "  UUID: #{player.uuid}"
+    puts
+    puts "Position"
+    puts "  Location: #{player.position}"
+    puts "  Rotation: #{player.rotation}"
+    puts "  World:    #{player.current_world}"
+    puts
+
+    puts "Stats"
+    puts "  Health:  #{player.stats.health} / #{player.stats.max_health}"
+    puts "  Stamina: #{player.stats.stamina&.round(1)}"
+    puts "  Oxygen:  #{player.stats.oxygen}"
+    puts "  Mana:    #{player.stats.mana}"
+    puts
+
+    puts "Progress"
+    puts "  Game Mode: #{player.game_mode}"
+    puts "  Zones:     #{player.discovered_zones.count} discovered"
+    player.discovered_zones.each { |z| puts "    #{z}" }
+    puts
+
+    puts "Hotbar"
+    player.inventory.hotbar.items.each do |item|
+      puts "  [#{item.slot}] #{item}"
+    end
+    puts
+
+    puts "Armor"
+    armor_slots = ["Head", "Chest", "Hands", "Legs"]
+    player.inventory.armor.items.each do |item|
+      slot_name = armor_slots[item.slot] || item.slot
+      puts "  #{slot_name}: #{item}"
+    end
+    puts
+
+    puts "Inventory (#{player.inventory.storage.items.count} items)"
+    player.inventory.storage.items.first(10).each do |item|
+      puts "  #{item}"
+    end
+    puts "  ... and #{player.inventory.storage.items.count - 10} more" if player.inventory.storage.items.count > 10
+    puts
+
+    puts "Memories (#{player.memories.count})"
+    player.memories.last(5).each do |m|
+      puts "  #{m.npc_role} at #{m.location}"
+    end
+  end
+
+  def map
+    save_name = @args[1]
+
+    unless save_name
+      puts "Usage: hytale map <save>"
+      puts
+      puts "Available saves:"
+      Hytale.saves.each { |s| puts "  #{s.name}" }
+      return
+    end
+
+    begin
+      save = Hytale.client.save(save_name)
+    rescue Hytale::NotFoundError
+      puts "Save not found: #{save_name}"
+      return
+    end
+
+    map = save.map
+    players = save.players
+
+    puts "Map: #{save.name}"
+    puts
+    puts "Coverage"
+    puts "  Regions: #{map.regions.count}"
+    puts "  Size:    #{map.total_size_mb} MB"
+
+    if map.bounds
+      b = map.bounds
+      puts "  Bounds:  X: #{b[:min_x]} to #{b[:max_x]}, Z: #{b[:min_z]} to #{b[:max_z]}"
+      puts "  Area:    #{b[:width]} x #{b[:height]} regions"
+    end
+    puts
+
+    if map.markers.any?
+      puts "Markers (#{map.markers.count})"
+      map.markers.each do |marker|
+        puts "  #{marker.name} at (#{marker.x}, #{marker.y}, #{marker.z})"
+      end
+      puts
+    end
+
+    puts "Regions"
+    map.regions.sort_by { |r| [r.x, r.z] }.each do |region|
+      puts "  (#{region.x}, #{region.z}) - #{region.size_mb} MB (#{region.modified_at.strftime("%Y-%m-%d %H:%M")})"
+    end
+    puts
+
+    puts "Players"
+    players.each do |p|
+      pos = p.position
+      puts "  #{p.name}: (#{pos.x.round}, #{pos.y.round}, #{pos.z.round})"
+    end
+    puts
+
+    puts "Map (explored regions)"
+    puts map.to_ascii(players: players)
+  end
+
+  def prefabs
+    category = @args[1]
+
+    categories = Hytale.client.prefab_categories
+
+    if categories.empty?
+      puts "No prefabs found."
+      puts "Expected at: #{Hytale::Client::Config.prefab_cache_path}"
+      return
+    end
+
+    if category
+      # Show prefabs in a specific category
+      prefabs = Hytale.client.prefabs_in_category(category)
+
+      if prefabs.empty?
+        puts "No prefabs found in category: #{category}"
+        puts
+        puts "Available categories:"
+        categories.each { |c| puts "  #{c}" }
+        return
+      end
+
+      puts "Prefabs in #{category} (#{prefabs.count})"
+      puts
+
+      # Group by subcategory if available
+      by_subcategory = prefabs.group_by(&:subcategory)
+
+      by_subcategory.each do |subcat, subprefabs|
+        if subcat
+          puts "  #{subcat} (#{subprefabs.count})"
+          subprefabs.first(5).each do |p|
+            puts "    #{p.name} - #{p.palette.size} block types"
+          end
+          puts "    ... and #{subprefabs.count - 5} more" if subprefabs.count > 5
+        else
+          subprefabs.first(10).each do |p|
+            puts "  #{p.name} - #{p.palette.size} block types"
+          end
+          puts "  ... and #{subprefabs.count - 10} more" if subprefabs.count > 10
+        end
+        puts
+      end
+    else
+      # Show summary of all categories
+      total = Hytale.client.prefabs.count
+
+      puts "Prefabs (#{total} total)"
+      puts
+
+      categories.each do |cat|
+        count = Hytale.client.prefabs_in_category(cat).count
+        puts "  #{cat.ljust(20)} #{count}"
+      end
+
+      puts
+      puts "Usage: hytale prefabs <category>"
+      puts
+      puts "Example:"
+      puts "  hytale prefabs Trees"
+    end
+  end
+
+  def log
+    log = Hytale.launcher_log
+
+    puts "Launcher Log"
+    puts "  Path:    #{log.path}"
+    puts "  Version: #{log.current_version}"
+    puts "  Channel: #{log.current_channel}"
+    puts "  Profile: #{log.current_profile_uuid}"
+    puts
+
+    puts "Summary"
+    puts "  Total Entries: #{log.entries.count}"
+    puts "  Sessions:      #{log.sessions.count}"
+    puts "  Game Launches: #{log.game_launches.count}"
+    puts "  Updates:       #{log.updates.count}"
+    puts "  Errors:        #{log.errors.count}"
+    puts "  Warnings:      #{log.warnings.count}"
+    puts
+
+    puts "Recent Sessions"
+    log.sessions.last(5).each do |session|
+      status = session.game_launched? ? "launched" : "no launch"
+      errors = session.errors.count > 0 ? ", #{session.errors.count} errors" : ""
+      puts "  #{session.started_at&.strftime("%Y-%m-%d %H:%M")} - v#{session.version} (#{status}#{errors})"
+    end
+    puts
+
+    if log.errors.any?
+      puts "Recent Errors"
+      log.errors.last(5).each do |e|
+        puts "  [#{e.timestamp&.strftime("%Y-%m-%d %H:%M")}] #{e.message}"
+      end
+      puts
+    end
+
+    puts "Recent Game Launches"
+    log.game_launches.last(5).each do |e|
+      puts "  #{e.timestamp&.strftime("%Y-%m-%d %H:%M:%S")}"
+    end
+  end
+
+  def help
+    puts "Hytale CLI v#{Hytale::VERSION}"
+    puts
+    puts "Usage: hytale <command> [options]"
+    puts
+    puts "Commands:"
+    COMMANDS.each do |cmd, desc|
+      puts "  #{cmd.ljust(12)} #{desc}"
+    end
+    puts
+    puts "Examples:"
+    puts "  hytale info"
+    puts "  hytale saves"
+    puts '  hytale save "New World"'
+    puts '  hytale player "New World" marcoroth'
+    puts '  hytale map "New World"'
+    puts "  hytale prefabs Trees"
+    puts "  hytale log"
+  end
+end
+
+CLI.new(ARGV).run
