@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Hytale Ruby</h1>
-  <h4>Ruby bindings for reading Hytale game data.</h4>
+  <h4>Ruby gem for reading Hytale game data.</h4>
 
   <p>
     <a href="https://rubygems.org/gems/hytale"><img alt="Gem Version" src="https://img.shields.io/gem/v/hytale"></a>
