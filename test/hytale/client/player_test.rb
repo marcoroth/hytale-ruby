@@ -104,10 +104,11 @@ class PlayerTest < Minitest::Spec
     assert_equal "default", @player.current_world
   end
 
-  it "should return the discovered zones" do
+  it "should return the discovered zones as Region objects" do
     zones = @player.discovered_zones
 
     assert_instance_of Array, zones
+    assert(zones.all? { |z| z.is_a?(Hytale::Client::Zone::Region) })
     assert_includes zones, "Zone1_Tier1"
     assert_includes zones, "Zone1_Tier2"
   end

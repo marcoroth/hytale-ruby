@@ -57,7 +57,9 @@ module Hytale
       end
 
       def discovered_zones
-        player_data.dig("PlayerData", "DiscoveredZones") || []
+        @discovered_zones ||= (player_data.dig("PlayerData", "DiscoveredZones") || []).map do |id|
+          Hytale::Client::Zone::Region.new(id)
+        end
       end
 
       def respawn_points
