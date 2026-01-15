@@ -80,6 +80,30 @@ class InventoryTest < Minitest::Spec
     assert_equal 2, storage.items.count
   end
 
+  it "should return the backpack storage" do
+    backpack = @inventory.backpack
+
+    assert_instance_of Hytale::Client::Player::ItemStorage, backpack
+  end
+
+  it "should return false for backpack? when no backpack data" do
+    refute @inventory.backpack?
+  end
+
+  it "should return false for backpack? when backpack is empty" do
+    data = sample_inventory_data.merge("Backpack" => { "Id" => "Empty" })
+    inventory = Hytale::Client::Player::Inventory.new(data)
+
+    refute inventory.backpack?
+  end
+
+  it "should return true for backpack? when backpack is equipped" do
+    data = sample_inventory_data.merge("Backpack" => { "Id" => "Simple", "Capacity" => 10, "Items" => {} })
+    inventory = Hytale::Client::Player::Inventory.new(data)
+
+    assert inventory.backpack?
+  end
+
   it "should return the armor storage" do
     armor = @inventory.armor
 

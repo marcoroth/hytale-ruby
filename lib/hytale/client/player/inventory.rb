@@ -16,6 +16,10 @@ module Hytale
           @storage ||= ItemStorage.new(data["Storage"] || {})
         end
 
+        def backpack
+          @backpack ||= ItemStorage.new(data["Backpack"] || {})
+        end
+
         def hotbar
           @hotbar ||= ItemStorage.new(data["HotBar"] || {})
         end
@@ -35,8 +39,12 @@ module Hytale
         def active_hotbar_slot = data["ActiveHotbarSlot"]
         def sort_type = data["SortType"]
 
+        def backpack?
+          backpack&.simple?
+        end
+
         def all_items
-          [storage, hotbar, armor, utility, tools].flat_map(&:items)
+          [storage, backpack, hotbar, armor, utility, tools].flat_map(&:items)
         end
 
         def to_h = data

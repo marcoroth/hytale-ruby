@@ -27,6 +27,35 @@ class ItemStorageTest < Minitest::Spec
     assert_equal "HotBar", @storage.type
   end
 
+  it "should not be empty when type is set" do
+    refute @storage.empty?
+  end
+
+  it "should be empty when type is Empty" do
+    storage = Hytale::Client::Player::ItemStorage.new({ "Id" => "Empty" })
+
+    assert storage.empty?
+  end
+
+  it "should not be empty/simple when type is nil" do
+    storage = Hytale::Client::Player::ItemStorage.new({})
+
+    refute storage.empty?
+    refute storage.simple?
+  end
+
+  it "should be simple when type is Simple" do
+    storage = Hytale::Client::Player::ItemStorage.new({ "Id" => "Simple", "Capacity" => 10 })
+
+    assert storage.simple?
+  end
+
+  it "should not be simple when type is Empty" do
+    storage = Hytale::Client::Player::ItemStorage.new({ "Id" => "Empty" })
+
+    refute storage.simple?
+  end
+
   it "should return all items as an array" do
     items = @storage.items
 
