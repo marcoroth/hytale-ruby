@@ -298,7 +298,7 @@ player.name                # => "marcoroth"
 player.uuid                # => "00000000-0000-0000-0000-000000000000"
 player.position            # => (590.75, 123.0, 374.2)
 player.game_mode           # => "Adventure"
-player.discovered_zones    # => ["Zone1_Spawn", "Zone1_Tier1", ...]
+player.discovered_zones    # => [Zone::Region, Zone::Region, ...]
 player.skin                # => PlayerSkin object
 player.avatar_preview_path # => "/path/to/CachedAvatarPreviews/uuid.png"
 ```
@@ -362,6 +362,79 @@ item.max_durability     # => 200.0
 item.durability_percent # => 14.9
 item.damaged?           # => true
 ```
+
+### Zones and Regions
+
+Hytale organizes the world into zones (biomes) and regions (areas within zones):
+
+**Zones (biomes):**
+
+**List all zones (requires game to be installed):**
+
+```ruby
+Hytale::Client::Zone.all
+# => [#<Zone id="Emerald_Wilds">, #<Zone id="Howling_Sands">, ...]
+```
+
+**Find a specific zone:**
+
+```ruby
+zone = Hytale::Client::Zone.find("Emerald_Wilds")
+zone.id      # => "Emerald_Wilds"
+zone.name    # => "Emerald Wilds"
+```
+
+**Get all regions in a zone:**
+
+```ruby
+zone.regions
+# => [#<Zone::Region id="Zone1_Spawn">, #<Zone::Region id="Zone1_Tier1">, ...]
+```
+
+**Regions (areas within zones):**
+
+**List all regions:**
+
+```ruby
+Hytale::Client::Zone::Region.all
+# => [#<Zone::Region id="Zone1_Spawn">, #<Zone::Region id="Zone1_Tier1">, ...]
+```
+
+**Find a specific region:**
+
+```ruby
+region = Hytale::Client::Zone::Region.find("Zone1_Tier1")
+region.id          # => "Zone1_Tier1"
+region.name        # => "Drifting Plains"
+region.region_name # => "Drifting Plains"
+```
+
+**Navigate to parent zone:**
+
+```ruby
+region.zone        # => #<Zone id="Emerald_Wilds">
+region.zone.name   # => "Emerald Wilds"
+```
+
+**Player discovered zones:**
+
+```ruby
+player.discovered_zones.each do |region|
+  puts "#{region.name} (#{region.zone.name})"
+end
+# => First Gate of the Echo (Emerald Wilds)
+# => Drifting Plains (Emerald Wilds)
+```
+
+**Zone/Region mapping:**
+
+| Zone | Region Prefix | Example Regions |
+|------|---------------|-----------------|
+| Emerald Wilds | Zone1_* | Zone1_Spawn, Zone1_Tier1, Zone1_Tier2, Zone1_Tier3 |
+| Howling Sands | Zone2_* | Zone2_Tier1, Zone2_Tier2, Zone2_Tier3 |
+| Whisperfrost Frontiers | Zone3_* | Zone3_Tier1, Zone3_Tier2, Zone3_Tier3 |
+| Devastated Lands | Zone4_* | Zone4_Tier4, Zone4_Tier5 |
+| Oceans | Oceans | Oceans |
 
 ### Memories (Discovered Creatures)
 
@@ -806,6 +879,34 @@ process.pid      # => 12345
 | `player(uuid)` | Find Player by UUID |
 | `player_skins` | List all cached PlayerSkin objects |
 | `player_skin(uuid)` | Find PlayerSkin by UUID |
+
+### Hytale::Client::Zone
+
+| Method | Description |
+|--------|-------------|
+| `all` | List all Zone objects (from locale) |
+| `find(id)` | Find Zone by ID, returns nil if not found |
+| `new(id)` | Create a Zone::Base instance |
+
+### Hytale::Client::Zone::Base
+
+| Method | Description |
+|--------|-------------|
+| `id` | Zone ID (e.g., "Emerald_Wilds") |
+| `name` | Translated zone name (e.g., "Emerald Wilds") |
+| `regions` | All Region objects belonging to this zone |
+
+### Hytale::Client::Zone::Region
+
+| Method | Description |
+|--------|-------------|
+| `all` | List all Region objects (from locale) |
+| `find(id)` | Find Region by ID, returns nil if not found |
+| `id` | Region ID (e.g., "Zone1_Tier1") |
+| `name` | Translated region name (e.g., "Drifting Plains") |
+| `region_name` | Same as `name` |
+| `zone` | Parent Zone::Base object |
+| `zone_name` | Parent zone's translated name |
 
 ### Hytale::Client::Map
 

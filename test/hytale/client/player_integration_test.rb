@@ -49,7 +49,12 @@ class PlayerIntegrationTest < Minitest::Spec
     zones = @player.discovered_zones
 
     assert_instance_of Array, zones
+    assert(zones.all? { |z| z.is_a?(Hytale::Client::Zone::Region) })
     assert_includes zones, "Zone1_Spawn"
+
+    region = zones.first
+
+    assert_equal "Zone1_Spawn", region.id
   end
 
   it "should have stats" do
