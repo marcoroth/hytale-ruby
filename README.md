@@ -625,8 +625,8 @@ chunk = region.each_chunk.first
 
 chunk.block_types      # => ["Rock_Stone", "Soil_Dirt", "Soil_Grass", ...]
 chunk.terrain_type     # => :grassland
-chunk.has_water?       # => false
-chunk.has_vegetation?  # => true
+chunk.water?           # => false
+chunk.vegetation?      # => true
 chunk.local_x          # => 15
 chunk.local_z          # => 8
 chunk.world_x          # => -272
@@ -839,8 +839,8 @@ process.pid      # => 12345
 | `block_types` | Block type IDs found in chunk |
 | `block_palette` | Parsed palette (index → block name) |
 | `terrain_type` | Detected terrain (`:grassland`, `:water`, etc.) |
-| `has_water?` | Contains water blocks |
-| `has_vegetation?` | Contains plant/grass blocks |
+| `water?` | Contains water blocks |
+| `vegetation?` | Contains plant/grass blocks |
 | `to_ascii_map` | 16x16 ASCII representation |
 
 ### Hytale::Client::Map::Block

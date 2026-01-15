@@ -10,7 +10,6 @@ module Hytale
         @path = path
       end
 
-      # Display settings
       def fullscreen? = data["Fullscreen"]
       def maximized? = data["Maximized"]
       def window_width = data["WindowWidth"]
@@ -21,12 +20,10 @@ module Hytale
       def unlimited_fps? = data["UnlimitedFps"]
       def field_of_view = data["FieldOfView"]
 
-      # Rendering settings
       def rendering
         @rendering ||= RenderingSettings.new(data["RenderingSettings"] || {})
       end
 
-      # Input settings
       def input_bindings
         @input_bindings ||= InputBindings.new(data["InputBindings"] || {})
       end
@@ -35,22 +32,18 @@ module Hytale
         @mouse_settings ||= MouseSettings.new(data["MouseSettings"] || {})
       end
 
-      # Audio settings
       def audio
         @audio ||= AudioSettings.new(data["AudioSettings"] || {})
       end
 
-      # Gameplay settings
       def gameplay
         @gameplay ||= GameplaySettings.new(data["GameplaySettings"] || {})
       end
 
-      # Builder tools settings
       def builder_tools
         @builder_tools ||= BuilderToolsSettings.new(data["BuilderToolsSettings"] || {})
       end
 
-      # UI preferences
       def hide_hud? = data["HideHud"]
       def hide_hotbar? = data["HideHotbar"]
       def hide_compass? = data["HideCompass"]

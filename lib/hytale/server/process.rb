@@ -3,6 +3,9 @@
 module Hytale
   module Server
     class Process
+      def self.running?
+        false
+      end
     end
   end
 end

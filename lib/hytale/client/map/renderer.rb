@@ -415,12 +415,10 @@ module Hytale
             ChunkyPNG::Color.rgb(194, 178, 128)
           when /Snow/, /Ice/
             ChunkyPNG::Color.rgb(240, 240, 255)
-          when /Dirt/
+          when /Dirt/, /Wood/
             ChunkyPNG::Color.rgb(139, 90, 43)
           when /Stone/, /Rock/
             ChunkyPNG::Color.rgb(128, 128, 128)
-          when /Wood/
-            ChunkyPNG::Color.rgb(139, 90, 43)
           when /Plant/
             ChunkyPNG::Color.rgb(34, 139, 34)
           when /Ore/

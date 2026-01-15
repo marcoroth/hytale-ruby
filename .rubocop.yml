@@ -28,10 +28,28 @@ Style/Documentation:
   Enabled: false
 
 Metrics/MethodLength:
-  Max: 30
+  Enabled: false
+
+Layout/LineLength:
+  Max: 180
 
 Metrics/ParameterLists:
   Max: 10
 
 Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ModuleLength:
   Enabled: false

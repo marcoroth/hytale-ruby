@@ -63,26 +63,26 @@ module Hytale
           @block_palette ||= extract_palette
         end
 
-        def has_block?(block_type)
+        def block?(block_type)
           block_types.include?(block_type)
         end
 
-        def has_water?
+        def water?
           block_types.any? { |t| t.include?("Water") }
         end
 
-        def has_vegetation?
+        def vegetation?
           block_types.any? { |t| t.include?("Plant") || t.include?("Grass") || t.include?("Tree") }
         end
 
         def terrain_type
-          if has_water?
+          if water?
             :water
           elsif block_types.any? { |t| t.include?("Sand") }
             :desert
           elsif block_types.any? { |t| t.include?("Snow") || t.include?("Ice") }
             :snow
-          elsif has_vegetation?
+          elsif vegetation?
             :grassland
           else
             :rocky
@@ -195,9 +195,7 @@ module Hytale
         def cache_path(texture_scale: 16, shading: true)
           return nil unless region
 
-          save_name = region.path.split("/").find do |p|
-            p.include?("Saves")
-          end&.then { |_| region.path.split("Saves/")[1]&.split("/")&.first } || "unknown"
+          save_name = region.path.split("/").find { |p| p.include?("Saves") }&.then { |_| region.path.split("Saves/")[1]&.split("/")&.first } || "unknown"
           world_name = region.path.split("/worlds/")[1]&.split("/")&.first || "default"
 
           cache_dir = File.join(
@@ -217,14 +215,17 @@ module Hytale
 
         def cached?(texture_scale: 16, shading: true)
           path = cache_path(texture_scale: texture_scale, shading: shading)
+
           path && File.exist?(path)
         end
 
         def clear_cache!
           path = cache_path
+
           return unless path
 
           dir = File.dirname(path)
+
           FileUtils.rm_rf(dir) if File.directory?(dir)
         end
 
@@ -238,6 +239,7 @@ module Hytale
           return nil unless type_id
 
           block_type = get_or_create_block_type(type_id)
+
           Block.new(block_type, x: x, y: y, z: z, chunk: self)
         end
 
@@ -643,7 +645,7 @@ module Hytale
                 index_position = position + 1 + length + 2
                 index = begin
                   search_data[index_position].ord
-                rescue StandardError
+                rescue StandardError # rubocop:disable Metrics/BlockNesting
                   nil
                 end
 

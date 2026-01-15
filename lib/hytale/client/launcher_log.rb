@@ -48,12 +48,18 @@ module Hytale
 
       def current_profile_uuid
         profile_entry = entries.reverse.find { |e| e.message&.include?("setting current profile") }
-        profile_entry&.message&.match(/to (\S+)/)&.[](1)
+
+        return nil unless profile_entry
+
+        profile_entry.message&.match(/to (\S+)/)&.[](1)
       end
 
       def current_channel
         channel_entry = entries.reverse.find { |e| e.message&.include?("setting channel") }
-        channel_entry&.attributes&.[]("channel")
+
+        return nil unless channel_entry
+
+        channel_entry.attributes&.[]("channel")
       end
 
       def last_game_launch
@@ -61,7 +67,6 @@ module Hytale
       end
 
       def sessions
-        # Group entries by launcher start
         sessions = []
         current_session = nil
 
