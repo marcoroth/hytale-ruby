@@ -333,9 +333,23 @@ end
 |------|-------------|
 | `hotbar` | 9-slot quick access bar |
 | `storage` | Main inventory (36 slots) |
+| `backpack` | Optional backpack storage (if equipped) |
 | `armor` | Head, chest, hands, legs |
 | `utility` | Utility items (4 slots) |
 | `tools` | Builder/editor tools |
+
+**Check if player has a backpack:**
+
+```ruby
+player.inventory.backpack?  # => true/false
+```
+
+**ItemStorage type checks:**
+
+```ruby
+player.inventory.backpack.empty?   # => true (type is "Empty" - no backpack equipped)
+player.inventory.backpack.simple?  # => true (type is "Simple" - backpack equipped)
+```
 
 **Item properties:**
 

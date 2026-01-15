@@ -13,6 +13,14 @@ module Hytale
         def capacity = data["Capacity"]
         def type = data["Id"]
 
+        def empty?
+          type == "Empty"
+        end
+
+        def simple?
+          type == "Simple"
+        end
+
         def items
           (data["Items"] || {}).map do |slot, item_data|
             Item.new(item_data, slot: slot.to_i)
