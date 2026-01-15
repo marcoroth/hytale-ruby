@@ -40,6 +40,15 @@ module TestHelpers
   def fixture_player_path
     Dir.glob(File.join(fixture_save_path, "universe/players/*.json")).first
   end
+
+  def fixture_player
+    return nil unless fixture_player_path
+
+    uuid = File.basename(fixture_player_path, ".json")
+    data = JSON.parse(File.read(fixture_player_path))
+
+    Hytale::Client::Player.new(data, uuid: uuid)
+  end
 end
 
 module Minitest
