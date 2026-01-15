@@ -295,7 +295,7 @@ save = Hytale.client.save("New World")
 player = save.players.first
 
 player.name                # => "marcoroth"
-player.uuid                # => "79816d74-0500-4dad-9767-06af86c17243"
+player.uuid                # => "00000000-0000-0000-0000-000000000000"
 player.position            # => (590.75, 123.0, 374.2)
 player.game_mode           # => "Adventure"
 player.discovered_zones    # => ["Zone1_Spawn", "Zone1_Tier1", ...]
@@ -1183,8 +1183,8 @@ Hytale.client.player_skins
 **Find a specific skin:**
 
 ```ruby
-skin = Hytale.client.player_skin("79816d74-0500-4dad-9767-06af86c17243")
-skin.uuid  # => "79816d74-0500-4dad-9767-06af86c17243"
+skin = Hytale.client.player_skin("00000000-0000-0000-0000-000000000000")
+skin.uuid  # => "00000000-0000-0000-0000-000000000000"
 ```
 
 **Appearance:**

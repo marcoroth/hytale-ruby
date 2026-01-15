@@ -43,7 +43,7 @@
     "Player": {
       "Version": 5,
       "UUID": {
-        "$binary": "eYFtdAUATa2XZwavhsFyQw==",
+        "$binary": "AAAAAAAAAAAAAAAAAAAAAA==",
         "$type": "04"
       },
       "Inventory": {
@@ -209,7 +209,7 @@
     "Instance": {},
     "UUID": {
       "UUID": {
-        "$binary": "eYFtdAUATa2XZwavhsFyQw==",
+        "$binary": "AAAAAAAAAAAAAAAAAAAAAA==",
         "$type": "04"
       }
     },
