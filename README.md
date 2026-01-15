@@ -4,7 +4,7 @@
 
   <p>
     <a href="https://rubygems.org/gems/hytale"><img alt="Gem Version" src="https://img.shields.io/gem/v/hytale"></a>
-    <a href="https://github.com/marcoroth/hytale-ruby/blob/main/LICENSE.txt"><img alt="License" src="https://img.shields.io/github/license/marcoroth/hytale"></a>
+    <a href="https://github.com/marcoroth/hytale-ruby/blob/main/LICENSE.txt"><img alt="License" src="https://img.shields.io/github/license/marcoroth/hytale-ruby"></a>
   </p>
 
   <p>Read and parse Hytale game data including settings, saves, players, and launcher logs.<br/>Cross-platform support for macOS, Windows, and Linux.</p>
