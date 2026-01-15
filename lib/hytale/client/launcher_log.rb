@@ -61,7 +61,6 @@ module Hytale
       end
 
       def sessions
-        # Group entries by launcher start
         sessions = []
         current_session = nil
 

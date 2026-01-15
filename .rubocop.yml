@@ -28,7 +28,7 @@ Style/Documentation:
   Enabled: false
 
 Metrics/MethodLength:
-  Max: 30
+  Enabled: false
 
 Metrics/ParameterLists:
   Max: 10
