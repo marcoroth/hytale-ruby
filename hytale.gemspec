@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Marco Roth"]
   spec.email = ["marco.roth@intergga.ch"]
 
-  spec.summary = "Ruby bindings for reading Hytale game data"
+  spec.summary = "Ruby gem for reading Hytale game data"
   spec.description = "A Ruby gem for reading and parsing Hytale game data including settings, player data, world saves, and launcher logs."
   spec.homepage = "https://github.com/marcoroth/hytale-ruby"
   spec.license = "MIT"
