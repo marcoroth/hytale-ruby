@@ -24,7 +24,9 @@ module Hytale
         def profile_uuid
           profile_entry = entries.find { |e| e.message&.include?("setting current profile") }
 
-          profile_entry&.message&.match(/to (\S+)/)&.[](1)
+          return nil unless profile_entry
+
+          profile_entry.message&.match(/to (\S+)/)&.[](1)
         end
 
         def game_launched?
