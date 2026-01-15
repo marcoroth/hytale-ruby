@@ -117,6 +117,8 @@ class ItemTest < Minitest::Spec
   end
 
   it "should check if icon exists" do
+    skip_unless_game_installed
+
     item = Hytale::Client::Player::Item.new({ "Id" => "Weapon_Sword_Copper" })
 
     assert item.icon_exists?

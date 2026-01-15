@@ -3,6 +3,10 @@
 require "test_helper"
 
 class ClientTest < Minitest::Spec
+  before do
+    skip_unless_game_installed
+  end
+
   it "should return all block types" do
     block_types = Hytale::Client.block_types
 
