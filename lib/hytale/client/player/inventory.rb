@@ -40,7 +40,7 @@ module Hytale
         def sort_type = data["SortType"]
 
         def backpack?
-          backpack && backpack.simple?
+          backpack&.simple?
         end
 
         def all_items
