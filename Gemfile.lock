@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hytale (0.1.1)
+    hytale (0.1.2)
       base64 (~> 0.3)
       chunky_png (~> 1.4)
       rubyzip (~> 2.3)
