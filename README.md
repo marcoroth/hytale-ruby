@@ -363,6 +363,57 @@ item.durability_percent # => 14.9
 item.damaged?           # => true
 ```
 
+**Respawn points:**
+
+```ruby
+player.respawn_points.each do |point|
+  puts "#{point.name} at #{point.position}"
+end
+# => Kweebec village at (-2150.5, 119.05, -403.1)
+# => Bed at (-795.1, 121.05, 29.47)
+```
+
+**Death positions:**
+
+```ruby
+player.death_positions.each do |death|
+  puts "Died on day #{death.day} at #{death.position}"
+end
+# => Died on day 68 at (-677.67, 27.99, -153.48)
+```
+
+**Discovered instances (dungeons, locations):**
+
+```ruby
+player.discovered_instances
+# => ["4781d0dd-5370-4962-a1fc-521ec7ff3e23", ...]
+```
+
+**Player state:**
+
+```ruby
+player.flying?              # => false
+player.first_spawn?         # => false
+player.head_rotation        # => Rotation object (separate from body)
+player.current_world        # => "default"
+```
+
+**Saved hotbars:**
+
+```ruby
+player.saved_hotbars        # => [ItemStorage, ...]
+player.current_hotbar_index # => 0
+```
+
+**Progress tracking:**
+
+```ruby
+player.known_recipes        # => []
+player.unique_item_usages   # => ["Upgrade_Backpack_1"]
+player.active_objectives    # => []
+player.reputation_data      # => {}
+```
+
 ### Zones and Regions
 
 Hytale organizes the world into zones (biomes) and regions (areas within zones):
@@ -879,6 +930,55 @@ process.pid      # => 12345
 | `player(uuid)` | Find Player by UUID |
 | `player_skins` | List all cached PlayerSkin objects |
 | `player_skin(uuid)` | Find PlayerSkin by UUID |
+
+### Hytale::Client::Player
+
+| Method | Description |
+|--------|-------------|
+| `name` | Player display name |
+| `uuid` | Player UUID |
+| `position` | Current Position object |
+| `rotation` | Current body Rotation object |
+| `head_rotation` | Current head Rotation object |
+| `velocity` | Current Vector3 velocity |
+| `stats` | EntityStats object (health, stamina, etc.) |
+| `inventory` | Inventory object |
+| `game_mode` | Current game mode ("Adventure", "Creative", etc.) |
+| `current_world` | Current world name |
+| `discovered_zones` | Array of Zone::Region objects |
+| `discovered_instances` | Array of discovered dungeon/location UUIDs |
+| `respawn_points` | Array of RespawnPoint objects |
+| `death_positions` | Array of DeathPosition objects |
+| `memories` | Array of PlayerMemory objects |
+| `known_recipes` | Array of learned recipe IDs |
+| `unique_item_usages` | Array of used item IDs (upgrades, etc.) |
+| `active_objectives` | Array of active quest UUIDs |
+| `reputation_data` | Hash of faction reputations |
+| `saved_hotbars` | Array of saved ItemStorage hotbars |
+| `current_hotbar_index` | Currently selected hotbar slot |
+| `flying?` | Is player currently flying |
+| `first_spawn?` | Has player spawned before |
+| `skin` | PlayerSkin object |
+| `avatar_preview_path` | Path to cached avatar image |
+
+### Hytale::Client::Player::RespawnPoint
+
+| Method | Description |
+|--------|-------------|
+| `name` | Respawn point name (e.g., "Ria's bed") |
+| `position` | Exact respawn Position |
+| `block_position` | Block coordinates Position |
+| `x`, `y`, `z` | Shortcut position accessors |
+
+### Hytale::Client::Player::DeathPosition
+
+| Method | Description |
+|--------|-------------|
+| `marker_id` | Death marker UUID |
+| `day` | Game day of death |
+| `position` | Death Position object |
+| `rotation` | Death Rotation object |
+| `x`, `y`, `z` | Shortcut position accessors |
 
 ### Hytale::Client::Zone
 

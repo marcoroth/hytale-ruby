@@ -98,7 +98,7 @@ class InventoryTest < Minitest::Spec
   end
 
   it "should return true for backpack? when backpack is equipped" do
-    data = sample_inventory_data.merge("Backpack" => { "Id" => "Simple", "Capacity" => 10, "Items" => {} })
+    data = sample_inventory_data.merge("Backpack" => { "Id" => "Simple", "Capacity" => 9, "Items" => {} })
     inventory = Hytale::Client::Player::Inventory.new(data)
 
     assert inventory.backpack?

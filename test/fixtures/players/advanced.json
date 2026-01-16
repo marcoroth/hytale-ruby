@@ -1,0 +1,555 @@
+{
+  "Components": {
+    "Nameplate": {
+      "Text": "Player"
+    },
+    "EffectController": {},
+    "ObjectiveHistory": {
+      "ObjectiveHistory": {},
+      "ObjectiveLineHistory": {}
+    },
+    "DisplayName": {
+      "DisplayName": {
+        "RawText": "Player",
+        "Bold": null,
+        "Italic": null,
+        "Monospace": null,
+        "Underline": null
+      }
+    },
+    "UIComponentList": {},
+    "Transform": {
+      "Position": {
+        "X": -778.0098876953125,
+        "Y": 120.0,
+        "Z": 25.287391662597656
+      },
+      "Rotation": {
+        "Pitch": 0.0,
+        "Yaw": -0.14254839718341827,
+        "Roll": 0.0
+      }
+    },
+    "PlayerMemories": {
+      "Capacity": 48,
+      "Memories": [
+        {
+          "Id": "NPC",
+          "NPCRole": "Moose_Bull",
+          "TranslationKey": "server.npcRoles.Moose_Bull.name",
+          "IsMemoriesNameOverridden": false,
+          "CapturedTimestamp": 1768525083821,
+          "FoundLocationNameKey": "server.map.region.Zone3_Tier1"
+        },
+        {
+          "Id": "NPC",
+          "NPCRole": "Spectre_Void",
+          "TranslationKey": "server.npcRoles.Spectre_Void.name",
+          "IsMemoriesNameOverridden": false,
+          "CapturedTimestamp": 1768526062459,
+          "FoundLocationNameKey": "server.map.region.Zone1_Tier3"
+        }
+      ]
+    },
+    "BuilderTools": {
+      "SelectionHistory": true
+    },
+    "Velocity": {
+      "Velocity": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    "Player": {
+      "Version": 5,
+      "UUID": {
+        "$binary": "AAAAAAAAAAAAAAAAAAAAAA==",
+        "$type": "04"
+      },
+      "Inventory": {
+        "Version": 4,
+        "Storage": {
+          "Id": "Simple",
+          "Capacity": 36,
+          "Items": {
+            "0": {
+              "Id": "Weapon_Arrow_Crude",
+              "Quantity": 60,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "4": {
+              "Id": "Plant_Fruit_Berries_Red",
+              "Quantity": 1,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "5": {
+              "Id": "Wood_Village_Wall_White_Full",
+              "Quantity": 8,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            }
+          }
+        },
+        "Armor": {
+          "Id": "Simple",
+          "Capacity": 4,
+          "Items": {
+            "0": {
+              "Id": "Armor_Copper_Head",
+              "Quantity": 1,
+              "Durability": 48.0,
+              "MaxDurability": 80.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "2": {
+              "Id": "Armor_Trork_Hands",
+              "Quantity": 1,
+              "Durability": 16.0,
+              "MaxDurability": 50.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "1": {
+              "Id": "Armor_Trork_Chest",
+              "Quantity": 1,
+              "Durability": 9.5,
+              "MaxDurability": 50.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "3": {
+              "Id": "Armor_Copper_Legs",
+              "Quantity": 1,
+              "Durability": 31.0,
+              "MaxDurability": 80.0,
+              "OverrideDroppedItemAnimation": false
+            }
+          }
+        },
+        "HotBar": {
+          "Id": "Simple",
+          "Capacity": 9,
+          "Items": {
+            "0": {
+              "Id": "Weapon_Sword_Copper",
+              "Quantity": 1,
+              "Durability": 90.0,
+              "MaxDurability": 100.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "2": {
+              "Id": "Tool_Hatchet_Thorium",
+              "Quantity": 1,
+              "Durability": 311.75,
+              "MaxDurability": 350.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "4": {
+              "Id": "Furniture_Crude_Torch",
+              "Quantity": 52,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "1": {
+              "Id": "Tool_Pickaxe_Iron",
+              "Quantity": 1,
+              "Durability": 175.5,
+              "MaxDurability": 250.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "3": {
+              "Id": "Weapon_Shortbow_Iron",
+              "Quantity": 1,
+              "Durability": 95.24000000000004,
+              "MaxDurability": 120.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "7": {
+              "Id": "Ingredient_Stick",
+              "Quantity": 1,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "5": {
+              "Id": "Food_Wildmeat_Cooked",
+              "Quantity": 25,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            }
+          }
+        },
+        "Utility": {
+          "Id": "Simple",
+          "Capacity": 4,
+          "Items": {
+            "0": {
+              "Id": "Furniture_Crude_Torch",
+              "Quantity": 2,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "1": {
+              "Id": "Weapon_Shield_Copper",
+              "Quantity": 1,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            }
+          }
+        },
+        "Backpack": {
+          "Id": "Simple",
+          "Capacity": 9,
+          "Items": {
+            "0": {
+              "Id": "Tool_Hatchet_Copper",
+              "Quantity": 1,
+              "Durability": 95.75,
+              "MaxDurability": 200.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "2": {
+              "Id": "Tool_Pickaxe_Thorium",
+              "Quantity": 1,
+              "Durability": 315.0,
+              "MaxDurability": 350.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "1": {
+              "Id": "Tool_Hoe_Copper",
+              "Quantity": 1,
+              "Durability": 11.0,
+              "MaxDurability": 200.0,
+              "OverrideDroppedItemAnimation": false
+            }
+          }
+        },
+        "ActiveHotbarSlot": 6,
+        "Tool": {
+          "Id": "Simple",
+          "Capacity": 23,
+          "Items": {
+            "0": {
+              "Id": "EditorTool_Paint",
+              "Quantity": 1,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "2": {
+              "Id": "EditorTool_Selection",
+              "Quantity": 1,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "4": {
+              "Id": "EditorTool_Line",
+              "Quantity": 1,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "1": {
+              "Id": "EditorTool_Sculpt",
+              "Quantity": 1,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "3": {
+              "Id": "EditorTool_Paste",
+              "Quantity": 1,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            },
+            "5": {
+              "Id": "EditorTool_Layers",
+              "Quantity": 1,
+              "Durability": 0.0,
+              "MaxDurability": 0.0,
+              "OverrideDroppedItemAnimation": false
+            }
+          }
+        },
+        "ActiveToolsSlot": -1,
+        "ActiveUtilitySlot": -1,
+        "SortType": "Type"
+      },
+      "PlayerData": {
+        "BlockIdVersion": 10,
+        "World": "default",
+        "KnownRecipes": [],
+        "PerWorldData": {
+          "default": {
+            "LastPosition": {
+              "X": -778.0098876953125,
+              "Y": 120.0,
+              "Z": 25.287391662597656,
+              "Pitch": -0.10182404518127441,
+              "Yaw": -0.1412571519613266,
+              "Roll": 0.0
+            },
+            "LastMovementStates": {
+              "Flying": false
+            },
+            "FirstSpawn": false,
+            "RespawnPoints": [
+              {
+                "BlockPosition": {
+                  "X": -2151,
+                  "Y": 118,
+                  "Z": -404
+                },
+                "RespawnPosition": {
+                  "X": -2150.5,
+                  "Y": 119.04999995231628,
+                  "Z": -403.10000002384186
+                },
+                "Name": "Player - Kweebec village"
+              },
+              {
+                "BlockPosition": {
+                  "X": -796,
+                  "Y": 120,
+                  "Z": 29
+                },
+                "RespawnPosition": {
+                  "X": -795.1000000238419,
+                  "Y": 121.04999995231628,
+                  "Z": 29.474999994039536
+                },
+                "Name": "Player's bed"
+              }
+            ],
+            "DeathPositions": [
+              {
+                "MarkerId": "death-marker-3e206715-0b3b-473f-94ff-523c82cdc4a0",
+                "Transform": {
+                  "X": -677.6748657226562,
+                  "Y": 27.987119674682617,
+                  "Z": -153.47509765625,
+                  "Pitch": 0.0,
+                  "Yaw": 0.0,
+                  "Roll": 0.0
+                },
+                "Day": 68
+              }
+            ]
+          }
+        },
+        "DiscoveredZones": [
+          "Zone1_Tier2",
+          "Zone3_Tier1",
+          "Zone3_Tier3",
+          "Zone2_Tier3",
+          "Zone2_Tier2",
+          "Zone2_Tier1",
+          "Zone1_Tier1",
+          "Zone4_Shore_Tier5",
+          "Zone4_Shallow_Ocean_Tier5",
+          "Zone3_Shore_Tier3",
+          "ForgottenTemple",
+          "Zone1_Shore",
+          "Zone4_Tier5",
+          "Zone1_Spawn",
+          "Zone3_Shallow_Ocean_Tier3",
+          "Zone1_Shallow_Ocean",
+          "Zone1_Temple",
+          "Zone2_Shore",
+          "Oceans",
+          "Zone3_Tier2",
+          "Zone1_Tier3"
+        ],
+        "DiscoveredInstances": [
+          {
+            "$binary": "R4HQ3VNwSWKh/FIex/8+Iw==",
+            "$type": "04"
+          },
+          {
+            "$binary": "lcskgPuuR3WR8lmFm7dtMQ==",
+            "$type": "04"
+          },
+          {
+            "$binary": "RWCMpAURTNaAvjLk+wIgOg==",
+            "$type": "04"
+          },
+          {
+            "$binary": "fcPUaxrkTsahgVT1JEU7FQ==",
+            "$type": "04"
+          },
+          {
+            "$binary": "SKYeSaj9RlOQI/TSQerLRA==",
+            "$type": "04"
+          },
+          {
+            "$binary": "BJIxl0k9RXC9ILWdhOCscQ==",
+            "$type": "04"
+          },
+          {
+            "$binary": "cfcOkHpTSoqupFhXCFaZFw==",
+            "$type": "04"
+          },
+          {
+            "$binary": "OZg5YnQGTcSLbMqw9Dko3g==",
+            "$type": "04"
+          }
+        ],
+        "ReputationData": {},
+        "ActiveObjectiveUUIDs": []
+      },
+      "BlockPlacementOverride": false,
+      "HotbarManager": {
+        "SavedHotbars": [
+          {
+            "Id": "Simple",
+            "Capacity": 9,
+            "Items": {
+              "0": {
+                "Id": "Weapon_Sword_Copper",
+                "Quantity": 1,
+                "Durability": 90.0,
+                "MaxDurability": 100.0,
+                "OverrideDroppedItemAnimation": false
+              },
+              "2": {
+                "Id": "Tool_Hatchet_Crude",
+                "Quantity": 1,
+                "Durability": 54.25,
+                "MaxDurability": 150.0,
+                "OverrideDroppedItemAnimation": false
+              },
+              "6": {
+                "Id": "Food_Wildmeat_Cooked",
+                "Quantity": 5,
+                "Durability": 0.0,
+                "MaxDurability": 0.0,
+                "OverrideDroppedItemAnimation": false
+              },
+              "1": {
+                "Id": "Tool_Pickaxe_Copper",
+                "Quantity": 1,
+                "Durability": 162.0,
+                "MaxDurability": 180.0,
+                "OverrideDroppedItemAnimation": false
+              },
+              "3": {
+                "Id": "Tool_Hoe_Crude",
+                "Quantity": 1,
+                "Durability": 69.0,
+                "MaxDurability": 90.0,
+                "OverrideDroppedItemAnimation": false
+              }
+            }
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "CurrentHotbar": 0
+      },
+      "GameMode": "Adventure"
+    },
+    "HitboxCollision": {
+      "HitboxCollisionConfigIndex": 1
+    },
+    "UniqueItemUsages": {
+      "UniqueItemUsed": [
+        "Upgrade_Backpack_1"
+      ]
+    },
+    "Instance": {},
+    "UUID": {
+      "UUID": {
+        "$binary": "AAAAAAAAAAAAAAAAAAAAAA==",
+        "$type": "04"
+      }
+    },
+    "EntityStats": {
+      "Version": 5,
+      "Stats": {
+        "Oxygen": {
+          "Id": "Oxygen",
+          "Value": 100.0
+        },
+        "Mana": {
+          "Id": "Mana",
+          "Value": 0.0
+        },
+        "Health": {
+          "Id": "Health",
+          "Value": 136.0,
+          "Modifiers": {
+            "Armor_ADDITIVE": {
+              "Id": "Static",
+              "CalculationType": "Additive",
+              "Amount": 36.0
+            }
+          }
+        },
+        "GlidingActive": {
+          "Id": "GlidingActive",
+          "Value": 0.0
+        },
+        "Immunity": {
+          "Id": "Immunity",
+          "Value": 0.0
+        },
+        "SignatureCharges": {
+          "Id": "SignatureCharges",
+          "Value": 0.0
+        },
+        "Stamina": {
+          "Id": "Stamina",
+          "Value": 10.0
+        },
+        "Ammo": {
+          "Id": "Ammo",
+          "Value": 0.0
+        },
+        "Unknown": {
+          "Id": "Unknown",
+          "Value": 0.0
+        },
+        "SignatureEnergy": {
+          "Id": "SignatureEnergy",
+          "Value": 0.0
+        },
+        "DeployablePreview": {
+          "Id": "DeployablePreview",
+          "Value": 0.0
+        },
+        "StaminaRegenDelay": {
+          "Id": "StaminaRegenDelay",
+          "Value": 0.0
+        },
+        "MagicCharges": {
+          "Id": "MagicCharges",
+          "Value": 0.0
+        }
+      }
+    },
+    "HeadRotation": {
+      "Rotation": {
+        "Pitch": -0.10182404518127441,
+        "Yaw": -0.1412571519613266,
+        "Roll": 0.0
+      }
+    }
+  }
+}

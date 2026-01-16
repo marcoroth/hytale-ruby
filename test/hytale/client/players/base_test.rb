@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class PlayerTest < Minitest::Spec
+class PlayerBaseTest < Minitest::Spec
   def sample_player_data
     {
       "Components" => {

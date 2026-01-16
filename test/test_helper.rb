@@ -37,17 +37,17 @@ module TestHelpers
     @fixture_region ||= fixture_map.regions.first
   end
 
-  def fixture_player_path
-    Dir.glob(File.join(fixture_save_path, "universe/players/*.json")).first
+  def fixture_players_path
+    File.expand_path("fixtures/players", __dir__)
   end
 
-  def fixture_player
-    return nil unless fixture_player_path
+  def load_player_fixture(name)
+    path = File.join(fixture_players_path, "#{name}.json")
+    return nil unless File.exist?(path)
 
-    uuid = File.basename(fixture_player_path, ".json")
-    data = JSON.parse(File.read(fixture_player_path))
+    data = JSON.parse(File.read(path))
 
-    Hytale::Client::Player.new(data, uuid: uuid)
+    Hytale::Client::Player.new(data, uuid: name)
   end
 end
 
