@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.executables = ["hytale"]
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "base64", "~> 0.3"
   spec.add_dependency "chunky_png", "~> 1.4"
   spec.add_dependency "rubyzip", "~> 2.3"
   spec.add_dependency "zeitwerk", "~> 2.6"
